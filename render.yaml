@@ -1,0 +1,44 @@
+# render.yaml — Render Infrastructure as Code
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: ai-backend-platform
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: '10000'
+      - key: LOG_LEVEL
+        value: info
+      - key: BUILD_VERSION
+        value: '1.0.0'
+      - key: API_KEY
+        generateValue: true
+      - key: AI_PROVIDER
+        value: mock
+      - key: CORS_ORIGINS
+        value: '*'
+      - key: RATE_LIMIT_PER_MINUTE
+        value: '60'
+      - key: MAX_BODY_SIZE_BYTES
+        value: '1048576'
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o
+      - key: AZURE_OPENAI_ENDPOINT
+        sync: false
+      - key: AZURE_OPENAI_KEY
+        sync: false
+      - key: AZURE_OPENAI_DEPLOYMENT
+        sync: false
+      - key: AZURE_OPENAI_API_VERSION
+        value: '2024-08-01-preview'
+    healthCheckPath: /health
+    autoDeploy: true

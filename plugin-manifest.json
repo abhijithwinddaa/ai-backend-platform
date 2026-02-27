@@ -1,0 +1,68 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.2/schema.json",
+  "schema_version": "v2.2",
+  "name_for_human": "AI Backend Platform",
+  "name_for_model": "ai_backend_platform",
+  "description_for_human": "Chat insights, resume ATS scoring, content generation, and more — powered by AI.",
+  "description_for_model": "An API that provides AI-powered chat summarization and insights, resume ATS scoring and optimization, and content generation. Use this plugin when the user wants to summarize conversations, analyze chat sentiment, score or improve resumes, or generate text content.",
+  "logo_url": "https://your-app.onrender.com/logo.png",
+  "contact_email": "your-email@example.com",
+  "legal_info_url": "https://your-app.onrender.com/legal",
+  "privacy_policy_url": "https://your-app.onrender.com/privacy",
+  "api": {
+    "type": "openapi",
+    "url": "https://your-app.onrender.com/openapi.json"
+  },
+  "auth": {
+    "type": "api_key",
+    "api_key": {
+      "name": "X-API-KEY",
+      "in": "header"
+    }
+  },
+  "capabilities": {
+    "conversation_starters": [
+      "Summarize this conversation",
+      "What insights can you find in this chat?",
+      "Score my resume against this job description",
+      "Help me improve my resume for a senior engineer role",
+      "Generate a professional email about project updates"
+    ]
+  },
+  "functions": [
+    {
+      "name": "summarizeChat",
+      "description": "Summarize a chat conversation into key points and action items.",
+      "parameters": {
+        "type": "object",
+        "required": ["messages"],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "description": "Chat messages to summarize"
+          },
+          "style": {
+            "type": "string",
+            "description": "Summary style: concise or detailed"
+          }
+        }
+      }
+    },
+    {
+      "name": "extractInsights",
+      "description": "Extract sentiment, topics, entities, risks, and follow-ups from a conversation."
+    },
+    {
+      "name": "scoreResume",
+      "description": "Score a resume (0-100) with ATS analysis, matched/missing skills."
+    },
+    {
+      "name": "improveResume",
+      "description": "Optimize a resume with improved bullets, keywords, and formatting."
+    },
+    {
+      "name": "generateContent",
+      "description": "Generate text content from a prompt with configurable tone and length."
+    }
+  ]
+}

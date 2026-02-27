@@ -1,0 +1,558 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AI Backend Platform",
+    "description": "Modular AI backend API — chat insights, resume ATS scoring, content generation, and more.",
+    "version": "0.0.0",
+    "contact": {
+      "name": "API Support"
+    },
+    "license": {
+      "name": "MIT",
+      "identifier": "MIT"
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-API-KEY",
+        "in": "header",
+        "description": "API key passed via X-API-KEY header"
+      }
+    },
+    "schemas": {}
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "tags": [
+          "Health"
+        ],
+        "description": "Returns server health status, uptime, and build version.",
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "example": "ok"
+                        },
+                        "uptimeSeconds": {
+                          "type": "number",
+                          "example": 123.45
+                        },
+                        "buildVersion": {
+                          "type": "string",
+                          "example": "1.0.0"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chat/summarize": {
+      "post": {
+        "summary": "Summarize a chat conversation",
+        "tags": [
+          "Chat"
+        ],
+        "description": "Analyzes chat messages and returns a summary, key points, and action items.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messages"
+                ],
+                "properties": {
+                  "messages": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "role",
+                        "content"
+                      ],
+                      "properties": {
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "user",
+                            "assistant",
+                            "system"
+                          ]
+                        },
+                        "content": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    }
+                  },
+                  "style": {
+                    "type": "string",
+                    "enum": [
+                      "concise",
+                      "detailed"
+                    ],
+                    "default": "concise"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "summary": {
+                          "type": "string"
+                        },
+                        "keyPoints": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "actionItems": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chat/insights": {
+      "post": {
+        "summary": "Extract insights from a chat conversation",
+        "tags": [
+          "Chat"
+        ],
+        "description": "Analyzes chat messages and returns sentiment, topics, entities, risks, and follow-ups.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messages"
+                ],
+                "properties": {
+                  "messages": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "role",
+                        "content"
+                      ],
+                      "properties": {
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "user",
+                            "assistant",
+                            "system"
+                          ]
+                        },
+                        "content": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    }
+                  },
+                  "signals": {
+                    "type": "object",
+                    "properties": {
+                      "sentiment": {
+                        "type": "boolean",
+                        "default": true
+                      },
+                      "topics": {
+                        "type": "boolean",
+                        "default": true
+                      },
+                      "entities": {
+                        "type": "boolean",
+                        "default": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "sentiment": {
+                          "type": [
+                            "null",
+                            "object"
+                          ],
+                          "properties": {
+                            "label": {
+                              "type": "string"
+                            },
+                            "score": {
+                              "type": "number"
+                            }
+                          }
+                        },
+                        "topics": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "entities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "risks": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "followUps": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/resume/score": {
+      "post": {
+        "summary": "Score a resume against a job description",
+        "tags": [
+          "Resume"
+        ],
+        "description": "Evaluates a resume with ATS scoring (0-100), matched/missing skills, and rationale.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "resumeText"
+                ],
+                "properties": {
+                  "resumeText": {
+                    "type": "string",
+                    "minLength": 10
+                  },
+                  "jobDescription": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "overallScore": {
+                          "type": "number"
+                        },
+                        "rationale": {
+                          "type": "string"
+                        },
+                        "matchedSkills": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "missingSkills": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/resume/improve": {
+      "post": {
+        "summary": "Improve a resume for ATS optimization",
+        "tags": [
+          "Resume"
+        ],
+        "description": "Returns improved bullets, keywords, formatting suggestions, and an optimized resume version.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "resumeText"
+                ],
+                "properties": {
+                  "resumeText": {
+                    "type": "string",
+                    "minLength": 10
+                  },
+                  "jobDescription": {
+                    "type": "string"
+                  },
+                  "targetRole": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "improvedBullets": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "keywordsToAdd": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "formattingSuggestions": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "optimizedVersion": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/content/generate": {
+      "post": {
+        "summary": "Generate content from a prompt",
+        "tags": [
+          "Content"
+        ],
+        "description": "Generates text content based on a prompt with configurable tone and length.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "prompt"
+                ],
+                "properties": {
+                  "prompt": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "tone": {
+                    "type": "string"
+                  },
+                  "length": {
+                    "type": "string",
+                    "enum": [
+                      "short",
+                      "medium",
+                      "long"
+                    ],
+                    "default": "medium"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "generatedText": {
+                          "type": "string"
+                        },
+                        "tokensUsage": {
+                          "type": "object",
+                          "properties": {
+                            "prompt": {
+                              "type": "number"
+                            },
+                            "completion": {
+                              "type": "number"
+                            },
+                            "total": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:{port}",
+      "description": "Local development",
+      "variables": {
+        "port": {
+          "default": "3000"
+        }
+      }
+    },
+    {
+      "url": "https://your-app.onrender.com",
+      "description": "Render production (replace with actual URL)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Health",
+      "description": "Server health check"
+    },
+    {
+      "name": "Chat",
+      "description": "Chat summarization & insights"
+    },
+    {
+      "name": "Resume",
+      "description": "Resume ATS scoring & improvement"
+    },
+    {
+      "name": "Content",
+      "description": "Generic content generation"
+    }
+  ]
+}

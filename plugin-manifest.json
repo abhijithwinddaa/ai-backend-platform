@@ -5,13 +5,13 @@
   "name_for_model": "ai_backend_platform",
   "description_for_human": "Chat insights, resume ATS scoring, content generation, and more — powered by AI.",
   "description_for_model": "An API that provides AI-powered chat summarization and insights, resume ATS scoring and optimization, and content generation. Use this plugin when the user wants to summarize conversations, analyze chat sentiment, score or improve resumes, or generate text content.",
-  "logo_url": "https://your-app.onrender.com/logo.png",
-  "contact_email": "your-email@example.com",
-  "legal_info_url": "https://your-app.onrender.com/legal",
-  "privacy_policy_url": "https://your-app.onrender.com/privacy",
+  "logo_url": "https://ai-backend-platform.onrender.com/logo.png",
+  "contact_email": "abhijithwinddaa@outlook.com",
+  "legal_info_url": "https://ai-backend-platform.onrender.com/legal",
+  "privacy_policy_url": "https://ai-backend-platform.onrender.com/privacy",
   "api": {
     "type": "openapi",
-    "url": "https://your-app.onrender.com/openapi.json"
+    "url": "https://ai-backend-platform.onrender.com/openapi.json"
   },
   "auth": {
     "type": "api_key",
